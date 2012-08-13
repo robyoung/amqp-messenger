@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+require_relative "../lib/messenger"
+
+if ARGV.length != 3
+  raise "Expecting three arguments; exchange, topic and message file."
+end
+
+messenger = Messenger.new(ARGV[0], ARGV[1])
+
+File.open(ARGV[2]).each do |line|
+   message = line.strip
+   puts "Sending message '#{message}'"
+   messenger.send(message)
+end
+
