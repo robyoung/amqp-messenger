@@ -14,18 +14,18 @@ class Messenger
     queue = client.queue(Digest::SHA2.hexdigest(DateTime.now.strftime))
     queue.bind(exchange, :key => @topic)
     queue.subscribe do |message|
+      p message[:delivery_details][:routing_key]
       p message[:payload]
     end
   end
 
   def send(message)
-    exchange.publish(message, :key => @topic)
+     exchange.publish(message, :key => @topic)
   end
 
   private
   def client
-    @client = Bunny.new ENV['AMQP'] if not @client
-    @client
+    @client ||= Bunny.new ENV['AMQP']
   end
 
   def exchange
